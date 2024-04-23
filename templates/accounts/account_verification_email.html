@@ -1,0 +1,25 @@
+{% autoescape off %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Cart - Email Verification</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+
+<div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+    <h2 style="text-align: center; color: #333333;">Great Cart - Email Verification</h2>
+    <p style="font-size: 16px; color: #666666;">Dear {{user.first_name}},</p>
+    <p style="font-size: 16px; color: #666666;">Thank you for registering with Great Cart. To complete your registration, please verify your email address by clicking the button below:</p>
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify Email Address</a>
+    </div>
+    <p style="font-size: 14px; color: #666666; margin-top: 30px;">If you did not create an account with Great Cart, you can ignore this email.</p>
+    <p style="font-size: 14px; color: #666666;">Best regards,<br> The Great Cart Team</p>
+</div>
+
+</body>
+</html>
+
+{% endautoescape %}

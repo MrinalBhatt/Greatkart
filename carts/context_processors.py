@@ -8,6 +8,6 @@ def cart_count(request):
         cart_items = CartItem.objects.filter(cart = cart, is_active = True)
         for cart_item in cart_items:
             cart_count += cart_item.quantity
-    except CartItem.DoesNotExist:
+    except Cart.DoesNotExist:
         cart_count = 0
     return {'cart_count' : cart_count}

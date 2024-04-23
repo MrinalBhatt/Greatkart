@@ -26,7 +26,7 @@ class MyAccountManager(BaseUserManager):
             username = username,
             password = password,
             first_name = first_name,
-            last_name = last_name,
+            last_name = last_name
         )
 
         user.is_admin = True
@@ -35,7 +35,11 @@ class MyAccountManager(BaseUserManager):
         user.is_superadmin  = True
         user.save(using = self._db)
         return user
-    
+gender_choice = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Others'),
+    )    
 
 # Create your models here.
 class Accounts(AbstractBaseUser):
@@ -47,6 +51,7 @@ class Accounts(AbstractBaseUser):
     phone_number    = models.CharField(max_length=50)
 
     # required fields
+    gender          = models.CharField(max_length=1, choices=gender_choice, default='M')
     date_joined     = models.DateTimeField(auto_now_add=True)
     last_login      = models.DateTimeField(auto_now_add=True)
     is_admin        = models.BooleanField(default=False)
