@@ -46,17 +46,18 @@
                         <div class="col"> 
                             <div class="input-group input-spinner">
                                 <div class="input-group-prepend">
-                                <a href="{% url 'delete_cart_quantity'  cart_item.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                <a href="{% url 'delete_cart_quantity'  cart_item.id cart_item.cart.cart_id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
                                 </div>
                                 <input type="text" class="form-control"  value="{{cart_item.quantity}}">
                                 <div class="input-group-append">
-                                    <form method="POST" action="{% url 'add_cart'  cart_item.product.id %}">
+                                    <form method="POST" action="{% url 'add_cart'  cart_item.product.id  %} ">
                                         {% csrf_token %}
                                         {% if cart_item.variation.all %}
                                         {% for item in cart_item.variation.all %}
                                             <input type="hidden" name="{{item.category_name | lower}}" value="{{item.category_value | lower}}" />
                                         {% endfor %}
                                         {% endif %}
+                                        <input type="hidden" name="cart_id" value="{{cart_item.cart.cart_id | lower}}" />
                                         <button type="submit" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </button>
                                     </form>
                                 </div>
@@ -70,7 +71,7 @@
             </div> <!-- price-wrap .// -->
         </td>
         <td class="text-right"> 
-        <a href="{% url 'remove_cart_item' cart_item.id  %}" class="btn btn-danger"> Remove</a>
+        <a href="{% url 'remove_cart_item' cart_item.id  cart_item.cart.cart_id %}" class="btn btn-danger"> Remove</a>
         </td>
     </tr>
      <!-- {{cart_item } -->
@@ -101,7 +102,7 @@
                 <p class="text-center mb-3">
                     <img src="{% static './images/misc/payments.png' %}" height="26">
                 </p>
-                <a href="./place-order.html" class="btn btn-primary btn-block"> Checkout </a>
+                <a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Checkout </a>
                 <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
             </div> <!-- card-body.// -->
             </div> <!-- card.// -->

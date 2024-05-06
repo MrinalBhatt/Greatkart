@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import requests.utils
 from .forms import SignupForm, LoginForm
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,8 @@ from django.http import HttpResponse
 from .models import Accounts
 from django.contrib import messages
 # Create your views here.
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
 
 # Verification Email
 from django.contrib.sites.shortcuts import get_current_site
@@ -15,6 +18,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
+import requests
 def signup(request):
     
     if request.method == "POST":
@@ -65,8 +69,48 @@ def login_view(request):
         password    = request.POST.get('password')
         user        = authenticate(request, email = email, password = password )
         if user:
+           
+            cart_id                     =  _cart_id(request)
+            user_cart                   = Cart.objects.filter(user = user).exists()
+            if user_cart:
+                is_new_user_cart        = Cart.objects.filter(cart_id = cart_id).exists()
+                if is_new_user_cart:
+                    new_user_cart       = Cart.objects.get(cart_id = cart_id)
+                    existing_user_cart  = Cart.objects.get(user = user)
+                    cart_items          = CartItem.objects.filter(cart = existing_user_cart)
+                    new_cart_items      = CartItem.objects.filter(cart = new_user_cart)
+                    for ext_item in cart_items:
+                        for new_item in new_cart_items:
+                            current_variation   = list(ext_item.variation.all())
+                            new_variation       = list(new_item.variation.all())
+                            if current_variation == new_variation:
+                                ext_item.quantity += new_item.quantity
+                                ext_item.save()
+                                new_item.delete()
+                    new_user_cart.user  = user
+                    new_user_cart.save()
+                    cart_items.update( cart = new_user_cart )
+                    existing_user_cart.delete()
+            else:
+                try:
+                    is_cart         = Cart.objects.filter(cart_id = cart_id).exists()
+                    if is_cart:
+                        cart        = Cart.objects.get(cart_id = cart_id)
+                        cart.user   = user
+                        cart.save()
+                except :
+                    messages.error(request,'not getting cart 2')
+                    pass
             login(request, user)
-            return redirect('dashboard')
+            url = request.META.get('HTTP_REFERER')
+            try:
+                query   = requests.utils.urlparse(url).query
+                params  = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                return redirect('dashboard')
         else:
 
             messages.error(request, "Invalid credentials!")

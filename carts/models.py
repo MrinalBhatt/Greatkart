@@ -1,11 +1,11 @@
 from django.db import models
 from store.models import Product,VariationProduct
-
+from accounts.models import Accounts
 # Create your models here.
 class Cart(models.Model):
-    cart_id = models.CharField(max_length=500, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+    cart_id     = models.CharField(max_length=500, blank=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+    user        = models.ForeignKey(Accounts, on_delete=models.CASCADE, null = True)
     def __str__(self) -> str:
         return self.cart_id
 
