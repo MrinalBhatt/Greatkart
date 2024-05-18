@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'carts',
+    'order',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mrinalbhatt2712@gmail.com'
 EMAIL_HOST_PASSWORD = 'etfk heyv uczr pocr' 
+
+#PayPal configurations
+PAYPAL_CLIENT_ID       = "AYRSwdYJXxsLCo6cUeUV_hkdBSbpisCuPIVcLAnv0s6x5Xnjw4kQTR5pUpwalQ--SFvWWegS57swLEaY"
+PAYPAL_CLIENT_SECRET   = "EIEsVriyS8JiiXy-T35N9uyaOo_zjpeEiJ4aqIOZscVo7rbkheh0EH_3OXLmvZTjl6tJH4tcrLsTXeQT"
+# PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'

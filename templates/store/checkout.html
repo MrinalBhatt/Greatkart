@@ -10,7 +10,7 @@
     <div class="card">
         <article class="card-body">
             <header class="mb-4"><h4 class="card-title">Billing Address</h4></header>
-        <form method="POST">
+        <form method="POST" action="{% url 'place_order'%}">
             {% csrf_token %}
                 <div class="form-row">
                     <div class="col form-group">
@@ -29,17 +29,17 @@
                     </div>
                     <div class="col form-group">
                         <label>Phone Number</label>
-                        <input type="text" class="form-control" placeholder="Phone number" name="phone_number">
+                        <input type="text" class="form-control" placeholder="Phone number" name="phone">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col form-group">
                         <label>Address Line1</label>
-                        <input type="text" class="form-control" placeholder="Address Line1" name="address_line_1">
+                        <input type="text" class="form-control" placeholder="Address Line1" name="address_line1">
                     </div>
                     <div class="col form-group">
                         <label>Address Line2</label>
-                        <input type="text" class="form-control" placeholder="Address Line2" name="address_line_2">
+                        <input type="text" class="form-control" placeholder="Address Line2" name="address_line2">
                     </div>
                 </div>
                 <div class="form-row">
@@ -58,11 +58,16 @@
                 </div>
                 <div class="form-row">
                     <div class="col form-group">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" placeholder="Pincode number" name="pincode">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col form-group">
                         <label>Order Note</label>
                         <textarea name="order_note" class="form-control" placeholder="Order Note"></textarea>
                     </div>
                 </div>
-        </form>
     </div> <!-- card.// -->
     
         </aside> <!-- col.// -->
@@ -131,11 +136,12 @@
                     <img src="{% static './images/misc/payments.png' %}" height="26">
                 </p>
                 {% if user.id is None %}
-                <a href="{% url 'login' %}" class="btn btn-primary btn-block"> Checkout </a>
+                <a href="{% url 'login' %}" class="btn btn-primary btn-block"> Place Order </a>
                 {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary btn-block"> Checkout </a>
+                <button type="submit" class="btn btn-primary btn-block"> Place Order </button>
                 {% endif %}
                 <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                </form>
             </div> <!-- card-body.// -->
             </div> <!-- card.// -->
     
